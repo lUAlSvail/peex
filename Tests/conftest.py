@@ -21,17 +21,13 @@ def init_browser(request):
         chrome_options.add_argument("ignore-certificate-errors")
         prefs = {'download.default_directory': '.\\Datas'}
         chrome_options.add_experimental_option('prefs', prefs)
-        chrome_options.add_extension('.\\Datas\\extension_3_12_0_0.crx')
         caps = DesiredCapabilities().CHROME
         caps["pageLoadStrategy"] = "none"
         chrome_options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
-        s = ChromeService(executable_path=".\\DriverLocation\\chromedriver.exe")
-        driver = webdriver.Chrome(service=s, options=chrome_options, desired_capabilities=caps)
+        from webdriver_manager.chrome import ChromeDriverManager
+        driver = webdriver.Chrome(ChromeDriverManager().install())
         Wh = driver.window_handles
-        time.sleep(8)
         driver.switch_to.window(Wh[0])
-        driver.close()
-        driver.switch_to.window(Wh[1])
     elif browsr_name == "firefox":
         firefox_options = webdriver.FirefoxOptions()
         firefox_options.accept_untrusted_certs = True
@@ -58,7 +54,6 @@ def pytest_runtest_makereport(item, call):
     report = outcome.get_result()
     extra = getattr(report, "extra", [])
     if report.when == "call":
-        extra.append(pytest_html.extras.url("https://demoqa.com/"))
         xfail = hasattr(report, "wasxfail")
         if (report.skipped and xfail) or (report.failed and not xfail):
             report_directory = os.path.dirname(item.config.option.htmlpath)
@@ -73,5 +68,3 @@ def pytest_runtest_makereport(item, call):
         report.extra = extra
 
 
-def pytest_html_report_title(report):
-    report.title = "DEMO QA REPORT!"

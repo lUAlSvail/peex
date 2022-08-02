@@ -7,7 +7,7 @@ import pyautogui
 import pytest
 import openpyxl
 from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException
-from selenium.webdriver import ActionChains, Keys, TouchActions
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.select import Select
